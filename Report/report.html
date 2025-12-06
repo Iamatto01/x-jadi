@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>TIJARAH MABRUR – Technical Reports Portal</title>
+
+<!-- Tailwind + Fonts -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- PDF libs are large — load lazily when needed to speed initial page load -->
+<!-- They will be loaded on-demand before Export/Submit actions -->
+
+<style>
+  /* ——— Force white text on colored boxes (overrides #tm-root * !important) ——— */
+  #tm-root .brand-banner,
+  #tm-root .brand-banner *,
+  #tm-root .badge,
+  #tm-root .badge *,
+  #tm-root .tab-btn.active,
+  #tm-root .tab-btn.active *,
+  #tm-root .btn-primary,
+  #tm-root .btn-primary *,
+  #tm-root .btn-danger,
+  #tm-root .btn-danger *,
+  #tm-root .b-blue,  #tm-root .b-blue  *,
+  #tm-root .b-red,   #tm-root .b-red   *,
+  #tm-root .b-green, #tm-root .b-green *,
+  #tm-root .b-amber, #tm-root .b-amber *,
+  #tm-root .b-violet,#tm-root .b-violet * {
+    color:#fff !important;
+  }
+
+  /* Icons follow text color */
+  #tm-root .brand-banner svg, #tm-root .badge svg,
+  #tm-root .tab-btn.active svg, #tm-root .btn-primary svg, #tm-root .btn-danger svg,
+  #tm-root .b-blue svg, #tm-root .b-red svg, #tm-root .b-green svg, #tm-root .b-amber svg, #tm-root .b-violet svg,
+  #tm-root .brand-banner svg *, #tm-root .badge svg *,
+  #tm-root .tab-btn.active svg *, #tm-root .btn-primary svg *, #tm-root .btn-danger svg *,
+  #tm-root .b-blue svg *, #tm-root .b-red svg *, #tm-root .b-green svg *, #tm-root .b-amber svg *, #tm-root .b-violet svg * {
+    fill: currentColor !important;
+    stroke: currentColor !important;
+  }
+
+  /* Optional: print back to black on white paper */
+  @media print{
+    #tm-root .brand-banner, #tm-root .brand-banner *,
+    #tm-root .badge, #tm-root .badge *,
+    #tm-root .tab-btn.active, #tm-root .tab-btn.active *,
+    #tm-root .btn-primary, #tm-root .btn-primary *,
+    #tm-root .btn-danger, #tm-root .btn-danger *,
+    #tm-root .b-blue, #tm-root .b-blue *, #tm-root .b-red, #tm-root .b-red *, #tm-root .b-green, #tm-root .b-green *, #tm-root .b-amber, #tm-root .b-amber *, #tm-root .b-violet, #tm-root .b-violet * {
+      color:#000 !important;
+    }
+  }
+  /* Force white text on any colored box */
+  .brand-banner,
+  .brand-banner *,
+  .badge,
+  .badge *,
+  .tab-btn.active,
+  .tab-btn.active *,
+  .btn-primary,
+  .btn-primary *,
+  .btn-danger,
+  .btn-danger *,
+  .b-blue, .b-blue *,
+  .b-red, .b-red *,
+  .b-green, .b-green *,
+  .b-amber, .b-amber *,
+  .b-violet, .b-violet * {
+    color:#fff !important;
+  }
+
+  /* Make icons follow the text color inside those boxes */
+  .brand-banner svg, .badge svg,
+  .tab-btn.active svg, .btn-primary svg, .btn-danger svg,
+  .b-blue svg, .b-red svg, .b-green svg, .b-amber svg, .b-violet svg,
+  .brand-banner svg *, .badge svg *,
+  .tab-btn.active svg *, .btn-primary svg *, .btn-danger svg *,
+  .b-blue svg *, .b-red svg *, .b-green svg *, .b-amber svg *, .b-violet svg * {
+    fill: currentColor !important;
+    stroke: currentColor !important;
+  }
+
+  /* (Optional) keep print friendly — black text on white when printing */
+  @media print{
+    .brand-banner, .brand-banner *, 
+    .badge, .badge *,
+    .tab-btn.active, .tab-btn.active *,
+    .btn-primary, .btn-primary *,
+    .btn-danger, .btn-danger *,
+    .b-blue, .b-blue *, .b-red, .b-red *, .b-green, .b-green *, .b-amber, .b-amber *, .b-violet, .b-violet * {
+      color:#000 !important;
+    }
+  }
+  /* Base look */
+  #tm-root, #tm-root *{font-family:'Inter',system-ui,Segoe UI,Helvetica,Arial,sans-serif!important;color:#111827!important;letter-spacing:normal!important;word-spacing:normal!important;text-transform:none!important;line-height:1.45!important;box-sizing:border-box!important;-webkit-font-smoothing:antialiased!important;-moz-osx-font-smoothing:grayscale!important}
+  :root{--tm-blue:#2563eb;--tm-red:#dc2626;--tm-green:#059669;--tm-amber:#d97706;--tm-violet:#7c3aed}
+  body{background:#f1f5f9}
+  .brand-card{background:#fff;border:1px solid #e5e7eb;border-radius:1rem;padding:1.25rem 1.5rem;position:relative}
+  .brand-logo{width:70px;height:70px;object-fit:contain}
+  .badge{display:inline-flex;align-items:center;gap:.35rem;font-weight:700;font-size:.68rem;padding:.28rem .6rem;border-radius:.5rem;color:#fff!important}
+  .b-blue{background:var(--tm-blue)!important}.b-red{background:var(--tm-red)!important}.b-green{background:var(--tm-green)!important}.b-amber{background:var(--tm-amber)!important}.b-violet{background:var(--tm-violet)!important}
+  .card{background:#fff;border:1px solid #e5e7eb;border-radius:1rem}
+  .field{background:#f9fafb;border:2px solid #e5e7eb;border-radius:.6rem;padding:.6rem .85rem;width:100%;font-size:.9rem}
+  .field:focus{outline:none;border-color:var(--tm-blue);box-shadow:0 0 0 3px rgba(37,99,235,.25)}
+  textarea.field{resize:vertical;min-height:2.75rem;line-height:1.35}
+  .tabbar{border:1px solid #e5e7eb;border-radius:1rem;background:#fff;padding:.6rem}
+  .tab-btn{display:block;width:100%;text-align:center;padding:.85rem .75rem;border:1px solid #e5e7eb;border-radius:.8rem;font-weight:800;background:#fff;font-size:.72rem;line-height:1.05rem}
+  .tab-btn.active{color:#fff!important;border-color:transparent}
+  .tab-btn[data-type="service"].active{background:var(--tm-blue)}.tab-btn[data-type="safety_valve"].active{background:var(--tm-red)}.tab-btn[data-type="pressure_gauge"].active{background:var(--tm-green)}.tab-btn[data-type="uttm"].active{background:var(--tm-amber)}.tab-btn[data-type="hydrotest"].active{background:var(--tm-violet)}
+  .tbl{border-collapse:collapse;width:100%}.tbl th,.tbl td{border:1px solid #e5e7eb;padding:.55rem .5rem}.tbl th{background:#f3f4f6;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em}
+  .section-title{font-size:1rem;font-weight:900;display:flex;align-items:center;gap:.65rem}
+  .section-title .line{flex:1;height:2px;background:linear-gradient(90deg,var(--tm-blue),transparent)}
+  .att{border:1px solid #e5e7eb;border-radius:.8rem;overflow:hidden;background:#fff;position:relative}
+  .att img{width:100%;height:auto;object-fit:contain;display:block;background:#f1f5f9;max-height:70vh}
+  .att .meta{font-size:.7rem;padding:.4rem .6rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .att .remove{position:absolute;top:.35rem;right:.35rem;font-size:.6rem;padding:.2rem .4rem;border-radius:.35rem;color:#fff;background:#ef4444}
+
+  /* Brand banner */
+  .brand-banner{background:linear-gradient(135deg,#1d4ed8,#2563eb);border-radius:1rem;padding:1.25rem 1.5rem;color:#fff!important;border:1px solid #1d4ed8;}
+  .brand-banner *{ color:#fff!important }
+
+  /* Print */
+  @media print{
+    body{background:#fff!important}
+    .print-hide{display:none!important}
+    #tm-sheet{box-shadow:none!important;border:1px solid #000!important}
+    .field{background:#fff!important;border:1px solid #000!important}
+    .tabbar,.brand-toolbar{display:none!important}
+    .badge{color:#000!important;background:#fff!important;border:1px solid #000}
+    .section-title .line{background:#000!important}
+    .brand-banner{background:#fff!important;color:#000!important;border:1px solid #000!important}
+    .brand-banner *{ color:#000!important }
+  }
+  .print-text{background:#fff;border:1px solid #e5e7eb;border-radius:.35rem;padding:.35rem .5rem;font-size:.92rem;white-space:pre-wrap;min-height:2rem}
+
+  /* Buttons: micro-animations & busy state */
+  .btn {
+    position:relative; display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+    padding:.6rem .9rem; border-radius:.75rem; font-weight:700; transition:transform .08s ease, box-shadow .18s ease, background .2s ease;
+    border:1px solid #e5e7eb; background:#fff;
+  }
+  .btn:active{ transform:translateY(1px) scale(.99) }
+  .btn.pulse{ animation:btnPulse 1.4s ease-in-out }
+  @keyframes btnPulse{0%{transform:scale(1)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
+  .btn-primary{ background:var(--tm-blue); color:#fff!important; border-color:transparent }
+  .btn-danger{ background:#ef4444; color:#fff!important; border-color:transparent }
+  .btn-ghost{ background:#fff; color:#111827!important }
+  .btn .spinner{ width:16px;height:16px;border:2px solid #fff;border-bottom-color:transparent;border-radius:50%;display:none }
+  .btn.is-busy{ pointer-events:none; opacity:.85 }
+  .btn.is-busy .spinner{ display:inline-block; animation:spin .85s linear infinite }
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* Overlay */
+  #overlay{background:rgba(0,0,0,.45)}
+</style>
+</head>
+<body>
+
+<div id="tm-root" class="max-w-7xl mx-auto p-4 lg:p-8 space-y-6">
+
+  <!-- Tabs -->
+  <div class="tabbar">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <button class="tab-btn active" data-type="service">Service<br/>Report</button>
+      <button class="tab-btn" data-type="safety_valve">Safety Valve<br/>Calibration</button>
+      <button class="tab-btn" data-type="pressure_gauge">Pressure Gauge<br/>Calibration</button>
+      <button class="tab-btn" data-type="uttm">UTTM<br/>Report</button>
+      <button class="tab-btn" data-type="hydrotest">Hydrotest<br/>Certificate</button>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="brand-toolbar card p-4 flex flex-wrap items-center justify-between gap-3 print-hide">
+    <div class="flex items-center gap-3">
+      <label class="text-sm font-semibold">Current Draft:</label>
+      <select id="draft-switcher" class="field w-56"></select>
+
+      <button id="btn-new" class="btn btn-ghost" title="Create a new draft">
+        <span class="spinner"></span>
+        New Draft
+      </button>
+
+      <button id="btn-del" class="btn btn-danger" title="Delete current draft">
+        <span class="spinner"></span>
+        Delete
+      </button>
+    </div>
+    <div class="flex items-center gap-2">
+      <button id="btn-sync" class="btn btn-primary">
+        <span class="spinner"></span>
+        Sync
+      </button>
+      <button id="btn-pdf" class="btn btn-ghost">Export PDF</button>
+      <button id="btn-submit" class="btn btn-primary">Request Review</button>
+    </div>
+  </div>
+
+  <!-- Sheet -->
+  <div id="tm-sheet" class="card p-6 sm:p-10 lg:p-12 space-y-10 shadow">
+    <section class="brand-banner mb-6">
+      <div class="flex flex-wrap items-center gap-4">
+        <img class="brand-logo invert-0" src="https://raw.githubusercontent.com/Iamatto01/TijarahMabrurLogo/82c731d4aeaf199e5ecde61afe64e8f932c57996/Main%20Logo.png" alt="TIJARAH MABRUR Logo" />
+        <div class="min-w-[280px] brand-text text-white">
+          <h1 class="text-[1.15rem] font-black m-0">TIJARAH MABRUR (M) SDN BHD</h1>
+          <p class="text-[.72rem] m-0">F-6-8, Setapak Commercial Centre (Starparc Point)</p>
+          <p class="text-[.72rem] m-0">Jalan Taman Ibu Kota, Taman Danau Kota</p>
+          <p class="text-[.72rem] m-0">53100 Setapak, Kuala Lumpur, Malaysia</p>
+          <p class="text-[.62rem] font-semibold mt-1">CONFIDENTIAL TECHNICAL SERVICE &amp; CALIBRATION DOCUMENT</p>
+        </div>
+        <div class="ml-auto flex flex-col items-end gap-2">
+          <span id="hdr-type" class="badge b-blue">SERVICE REPORT</span>
+          <span id="hdr-serial" class="badge b-blue">SERIAL –</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- GENERAL DATA (short) -->
+    <section>
+      <h2 class="section-title">GENERAL DATA <span class="line"></span></h2>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="space-y-4">
+          <div><label class="block text-xs font-semibold">Client</label><input id="gen_client" class="field"></div>
+          <div><label class="block text-xs font-semibold">Owner / Purchaser</label><input id="gen_owner" class="field"></div>
+          <div><label class="block text-xs font-semibold">Project</label><input id="gen_project" class="field"></div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="block text-xs font-semibold">P.O / S.O No.</label><input id="gen_po" class="field"></div>
+            <div><label class="block text-xs font-semibold">Certificate No. (auto)</label><input id="gen_certno" class="field" placeholder="Auto from backend" readonly></div>
+          </div>
+          <div><label class="block text-xs font-semibold">Date of Issue</label><input id="gen_issue" type="date" class="field"></div>
+        </div>
+        <div class="space-y-4">
+          <div class="text-[.7rem] font-bold uppercase tracking-wide">Vendor / Manufacturer</div>
+          <div><label class="block text-xs font-semibold">Company</label><input id="ven_company" class="field"></div>
+          <div><label class="block text-xs font-semibold">Address</label><textarea id="ven_addr" rows="3" class="field"></textarea></div>
+          <div><label class="block text-xs font-semibold">Person In-Charge</label><input id="ven_pic" class="field"></div>
+          <div><label class="block text-xs font-semibold">Contact</label><input id="ven_contact" class="field"></div>
+        </div>
+        <div class="space-y-4">
+          <div class="text-[.7rem] font-bold uppercase tracking-wide">Site Test Location</div>
+          <div><label class="block text-xs font-semibold">Company</label><input id="site_company" class="field"></div>
+          <div><label class="block text-xs font-semibold">Address</label><textarea id="site_addr" rows="3" class="field"></textarea></div>
+          <div><label class="block text-xs font-semibold">Person In-Charge</label><input id="site_pic" class="field"></div>
+          <div><label class="block text-xs font-semibold">Contact</label><input id="site_contact" class="field"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICE REPORT (kept concise for demo) -->
+    <section id="sec-service" class="space-y-8">
+      <h2 class="section-title"><span>PMT SERVICE &amp; MAINTENANCE REPORT</span> <span class="line"></span></h2>
+      <div>
+        <div class="mb-2 text-xs font-semibold tracking-wide">Unit Detail</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="block text-xs font-semibold">PMT No</label><input id="sr_pmt" class="field"></div>
+            <div><label class="block text-xs font-semibold">Serial No</label><input id="sr_serial" class="field"></div>
+            <div><label class="block text-xs font-semibold">Vessel Type</label><input id="sr_vessel" class="field"></div>
+            <div><label class="block text-xs font-semibold">Manufacturer</label><input id="sr_make" class="field"></div>
+            <div><label class="block text-xs font-semibold">Year Built</label><input id="sr_year" class="field" placeholder="YYYY"></div>
+            <div><label class="block text-xs font-semibold">Safety Valve Size</label><input id="sr_svsz" class="field" placeholder='e.g. 1/2"'></div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="block text-xs font-semibold">MAWP (Psi)</label><input id="sr_mawp" type="number" step="any" class="field"></div>
+            <div><label class="block text-xs font-semibold">Volume (Litre)</label><input id="sr_vol" type="number" step="any" class="field"></div>
+            <div><label class="block text-xs font-semibold">Service Date</label><input id="sr_svcdate" type="date" class="field"></div>
+            <div><label class="block text-xs font-semibold">Service Team</label><input id="sr_team" class="field"></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-xs font-semibold tracking-wide">Scope of Maintenance</div>
+          <div class="print-hide">
+            <button id="sr_scope_add" class="btn btn-ghost text-[.7rem]">Add Item</button>
+            <button id="sr_scope_clear" class="btn btn-ghost text-[.7rem]">Clear</button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table id="sr_scope_tbl" class="tbl text-[.74rem]">
+            <thead><tr><th class="text-left">#</th><th class="text-left">Description</th><th class="text-center" style="width:2.2rem">✓</th><th class="print-hide" style="width:4.2rem"></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div><div class="text-xs font-semibold mb-1">Comments &amp; Recommendations</div><textarea id="sr_comments" rows="3" class="field"></textarea></div>
+      <div><div class="text-xs font-semibold mb-1">Summary</div><textarea id="sr_summary" rows="3" class="field"></textarea></div>
+      <div><div class="text-xs font-semibold mb-1">Appendix</div><textarea id="sr_appendix" rows="3" class="field"></textarea></div>
+    </section>
+
+    <!-- Review / Approval (locked) -->
+    <section>
+      <h2 class="section-title">Review &amp; Approval <span class="line"></span></h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div><label class="block text-xs font-semibold">Reviewed / Calibrated by</label><input id="sign_reviewed" class="field" placeholder="(filled at Review portal)" readonly></div>
+        <div><label class="block text-xs font-semibold">Approved by</label><input id="sign_approved" class="field" placeholder="(filled at Approval portal)" readonly></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Overlay -->
+  <div id="overlay" class="fixed inset-0 hidden bg-black/50 backdrop-blur-sm z-50 items-center justify-center">
+    <div class="bg-white rounded-xl p-6 w-full max-w-sm text-center">
+      <svg class="animate-spin h-10 w-10 text-blue-600 mx-auto" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+      <div id="overlay-text" class="mt-4 font-semibold">Working…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ======================= CONFIG ======================= */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxEqQcvflGZcfpVAw_S6lVgRjvMMCOmFG0pFWQu8STSmVg0cJPx_VvbxOo1lUxfAjE/exec"; // <-- put your Web App URL
+const DBKEY = "tm_reports_v10";
+const TYPE_INFO = {
+  service:{abbr:"SR",label:"SERVICE REPORT",color:"b-blue"},
+  safety_valve:{abbr:"SV",label:"SAFETY VALVE CALIBRATION",color:"b-red"},
+  pressure_gauge:{abbr:"PG",label:"PRESSURE GAUGE CALIBRATION",color:"b-green"},
+  uttm:{abbr:"UTTM",label:"UTTM REPORT",color:"b-amber"},
+  hydrotest:{abbr:"HT",label:"HYDROTEST CERTIFICATE",color:"b-violet"}
+};
+
+/* ======================= HELPERS ======================= */
+const $=(s,p=document)=>p.querySelector(s);
+const $$=(s,p=document)=>Array.from(p.querySelectorAll(s));
+const todayISO=()=>new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+const pick=ids=>Object.fromEntries(ids.map(id=>[id,$('#'+id)?.value??""]));
+const setv=(id,val)=>{ const el=$('#'+id); if(el) el.value=(val??""); };
+const setBadge=(el,ok)=>{ if(!el) return; el.textContent=ok?"PASS":"FAIL"; el.className="badge "+(ok?"b-green":"b-red"); };
+
+/* Lazy-load helpers for heavy PDF libraries (html2canvas / jspdf / html2pdf) */
+function loadScript(src){
+  return new Promise((resolve,reject)=>{
+    if(document.querySelector(`script[src="${src}"]`)) return resolve();
+    const s = document.createElement('script'); s.src = src; s.onload = () => resolve(); s.onerror = () => reject(new Error('Failed to load '+src)); document.head.appendChild(s);
+  });
+}
+let _pdfLibsLoaded = false;
+async function loadPdfLibs(){
+  if(_pdfLibsLoaded) return;
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js');
+  _pdfLibsLoaded = true;
+}
+
+/* local store (fixed) */
+function loadStore(){ try{ return JSON.parse(localStorage.getItem(DBKEY)||"{}"); }catch(e){ return {}; } }
+function saveStore(d){ localStorage.setItem(DBKEY, JSON.stringify(d||{})); }
+function draftsOf(t){ const s=loadStore(); return (s[t]||[]).sort((a,b)=>b.id.localeCompare(a.id)); }
+function writeDraft(d){ const s=loadStore(); s[d.type]=s[d.type]||[]; const i=s[d.type].findIndex(x=>x.id===d.id); if(i>=0) s[d.type][i]=d; else s[d.type].unshift(d); saveStore(s); }
+function deleteDraftFromStore(t,id){ const s=loadStore(); s[t]=(s[t]||[]).filter(x=>x.id!==id); saveStore(s); }
+
+/* Busy state */
+function withBusy(btn, fn){
+  const was = btn.classList.contains('is-busy');
+  btn.classList.add('is-busy'); btn.classList.add('pulse');
+  return Promise.resolve().then(fn).finally(()=>{ if(!was){ btn.classList.remove('is-busy'); setTimeout(()=>btn.classList.remove('pulse'), 250); }});
+}
+function showToast(msg, type='ok', ms=1800){
+  const t=document.createElement('div');
+  t.className = 'fixed bottom-6 right-6 z-[9999] px-3 py-2 rounded-lg text-sm font-semibold shadow-lg '+(type==='ok'?'bg-green-600 text-white':'bg-red-600 text-white');
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transform='translateY(8px)'; t.style.transition='all .25s'; setTimeout(()=>t.remove(),250); }, ms);
+}
+
+/* API with good errors */
+async function api(body, {timeoutMs=15000} = {}){
+  const ctrl = new AbortController();
+  const to = setTimeout(()=>ctrl.abort('timeout'), timeoutMs);
+  let resp, text, json;
+  try{
+    resp = await fetch(SCRIPT_URL, {
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify(body),
+      mode:'cors',
+      redirect:'follow',
+      credentials:'omit',
+      signal: ctrl.signal
+    });
+    text = await resp.text();
+    try{ json = JSON.parse(text); }catch{ throw new Error('Bad JSON from backend: '+String(text).slice(0,200)); }
+    if (!resp.ok || json.ok === false) throw new Error(json?.error || ('HTTP '+resp.status));
+    return json;
+  }catch(err){ throw new Error(err?.message || 'Network error'); }
+  finally{ clearTimeout(to); }
+}
+
+/* Try variant action names (to avoid "Unknown action") */
+async function tryActions(base, names){
+  let last=null;
+  for(const a of names){
+    try{ return await api({...base, action:a}); }
+    catch(e){
+      last=e;
+      if(String(e.message).toLowerCase().includes('unknown action')) continue;
+      else break;
+    }
+  }
+  throw last || new Error('No backend action matched');
+}
+
+/* ======================= DRAFT STATE ======================= */
+let curType = "service";
+let curId   = null;
+
+function currentDraft(){ return draftsOf(curType).find(x=>x.id===curId); }
+function refreshSwitcher(){
+  const sel=$('#draft-switcher'); sel.innerHTML="";
+  draftsOf(curType).forEach(d=>{
+    const o=document.createElement('option'); o.value=d.id; o.textContent=d.fields?.serial||"(draft)"; sel.appendChild(o);
+  });
+  if(curId && draftsOf(curType).some(x=>x.id===curId)) sel.value=curId;
+}
+function applyHeader(){
+  const info = TYPE_INFO[curType] || TYPE_INFO.service;
+  $('#hdr-type').textContent = info.label;
+  $('#hdr-type').className = 'badge '+info.color;
+  const d=currentDraft();
+  $('#hdr-serial').textContent = d?.fields?.serial || 'SERIAL –';
+  $('#hdr-serial').className = 'badge '+info.color;
+}
+
+/* ======================= COLLECT & FILL ======================= */
+function collectGeneral(){ return pick(['gen_client','gen_owner','gen_project','gen_po','gen_certno','gen_issue','ven_company','ven_addr','ven_pic','ven_contact','site_company','site_addr','site_pic','site_contact']); }
+function fillGeneral(g){ Object.entries(g||{}).forEach(([k,v])=>setv(k,v)); }
+
+/* SR scope table */
+function addScopeRow(no,text="",ok=false){
+  const tr=document.createElement('tr'); tr.dataset.no=no;
+  tr.innerHTML=`<td>${no}</td>
+    <td><textarea class="field scope-text" rows="2">${text||""}</textarea></td>
+    <td class="text-center"><input type="checkbox" class="scope-ok" ${ok?"checked":""}></td>
+    <td class="print-hide text-right"><button class="btn btn-ghost text-[.65rem]">Remove</button></td>`;
+  $('#sr_scope_tbl tbody').appendChild(tr);
+  tr.querySelector('button').addEventListener('click',()=>{tr.remove(); renumberScope(); saveDraft(); queueAutoSync();});
+  tr.querySelector('.scope-text').addEventListener('input', ()=>{ saveDraft(); queueAutoSync(); });
+  tr.querySelector('.scope-ok').addEventListener('change', ()=>{ saveDraft(); queueAutoSync(); });
+}
+function renumberScope(){ $$('#sr_scope_tbl tbody tr').forEach((tr,i)=>tr.dataset.no=i+1); }
+function defaultScope(){
+  const defaults=[
+    "External physical condition service: Cleaning all the visual dirt, grease, dust etc (as practicable).",
+    "Internal vessel service: Clean dirt/oil/water/impurities; check internal corrosion. Touch up with anti-corrosion paint if required.",
+    "Safety valve testing: Manual & in-operation at setting value. Perform calibration check as per TMSB procedure.",
+    "Draining valve: Ensure it functions & drains vessel appropriately.",
+    "Pressure gauge: 'Zero value' at emptied vessel; mark at MAWP; calibration check as per TMSB procedure.",
+    "Testing & commissioning: Run system to verify proper operation.",
+    "OPTIONAL: UTTM (4 critical points only)."
+  ];
+  defaults.forEach((t,i)=>addScopeRow(i+1,t,i!==6));
+}
+function collectSR(){
+  const scope=[];
+  $$('#sr_scope_tbl tbody tr').forEach(tr=>{
+    scope.push({no:parseInt(tr.dataset.no,10),text:$('.scope-text',tr).value,ok:$('.scope-ok',tr).checked});
+  });
+  return {
+    unit:pick(['sr_pmt','sr_serial','sr_vessel','sr_make','sr_year','sr_svsz','sr_mawp','sr_vol','sr_svcdate','sr_team']),
+    scope,
+    comments:$('#sr_comments').value||"",
+    summary:$('#sr_summary').value||"",
+    appendix:$('#sr_appendix').value||""
+  };
+}
+function fillSR(sr){
+  Object.entries(sr?.unit||{}).forEach(([k,v])=>setv(k,v));
+  const tb=$('#sr_scope_tbl tbody'); tb.innerHTML="";
+  (sr?.scope?.length?sr.scope:[]).forEach(r=>addScopeRow(r.no,r.text,r.ok));
+  if(!(sr?.scope?.length)) defaultScope();
+  setv('sr_comments',sr?.comments); setv('sr_summary',sr?.summary); setv('sr_appendix',sr?.appendix);
+}
+
+/* load & save */
+function loadDraft(){
+  const d=currentDraft(); if(!d) return;
+  fillGeneral(d.general); fillSR(d.sr);
+  applyHeader();
+}
+function saveDraft(){
+  const d=currentDraft(); if(!d) return;
+  d.general = collectGeneral();
+  d.sr      = collectSR();
+  writeDraft(d); refreshSwitcher(); applyHeader();
+}
+
+/* ======================= PRINTABLE CLONE & PDF ======================= */
+function buildPrintableClone(){
+  const area = document.getElementById('tm-sheet');
+  const wrap = area.cloneNode(true);
+  wrap.classList.add('export-clone');
+  wrap.querySelectorAll('.print-hide,[data-clear],input[type=file],button').forEach(el => el.remove());
+  wrap.querySelectorAll('input, textarea, select').forEach(el=>{
+    const box=document.createElement('div'); box.className='print-text';
+    box.textContent = (el.tagName==='SELECT' ? (el.selectedOptions[0]?.text || el.value)
+                    : (el.type==='checkbox' ? (el.checked?'✓':'—') : (el.value||'')));
+    const h=Math.max(el.scrollHeight||0, el.offsetHeight||32);
+    box.style.minHeight = h+'px';
+    el.replaceWith(box);
+  });
+  return wrap;
+}
+async function buildPdfDataUri(){
+  const clone=buildPrintableClone(); document.body.appendChild(clone);
+  try{
+    const opt = {
+      filename: 'report.pdf',
+      image: { type: 'jpeg', quality: 0.76 },
+      html2canvas: { scale: 1.35, useCORS: true, logging: false },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true }
+    };
+    return await window.html2pdf().set(opt).from(clone).output('datauristring');
+  } finally { clone.remove(); }
+}
+
+function dataURItoBlob(dataURI){
+  // supports data:[<mediatype>][;base64],<data>
+  const parts = dataURI.split(',');
+  const meta = parts[0] || '';
+  const isBase64 = meta.indexOf(';base64') !== -1;
+  const byteString = isBase64 ? atob(parts[1]) : decodeURIComponent(parts[1]);
+  const mimeMatch = meta.match(/:(.*?);/) || meta.match(/:(.*)$/);
+  const mime = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
+  const ab = new Uint8Array(byteString.length);
+  for(let i=0;i<byteString.length;i++) ab[i]=byteString.charCodeAt(i);
+  return new Blob([ab], { type: mime });
+}
+
+async function buildPdfBlob(){
+  const dataUri = await buildPdfDataUri();
+  return dataURItoBlob(dataUri);
+}
+
+/* ======================= BACKEND SYNC ======================= */
+function flatten(obj, prefix='', out={}){ Object.entries(obj||{}).forEach(([k,v])=>{
+  const key = prefix ? `${prefix}.${k}` : k;
+  if (v && typeof v === 'object' && !Array.isArray(v)) flatten(v, key, out); else out[key] = v;
+}); return out; }
+
+function collectAllForSubmit(){
+  const d=currentDraft(); const general=collectGeneral(); const sr=collectSR();
+  const fields = flatten({general, sr});
+  fields.title = general.gen_client || '';
+  fields.serial = d?.fields?.serial || '';
+  fields['sr-client'] = general.gen_client || '';
+  fields['sr-reportdate'] = sr?.unit?.sr_svcdate || general.gen_issue || '';
+  fields['sr-team'] = sr?.unit?.sr_team || '';
+  return { action:'submit', type: TYPE_INFO[curType].label, id: d?.id, serial: d?.fields?.serial, fields, attachments: [] };
+}
+
+/* Push current draft to server */
+async function syncPush(){
+  const d=currentDraft(); if(!d) throw new Error('No draft');
+  const payload = {
+    id: d.id,
+    type: d.type,
+    serial: d.fields?.serial,
+    fields: flatten({general: d.general, sr: d.sr}),
+    attachments: [] // add attachment packing here if you later enable uploads
+  };
+  const res = await tryActions(payload, ['draft_sync','draft_save','save','autosave','draft_update']);
+  return res;
+}
+/* Pull the latest from server (fills cert no/ status if available) */
+async function syncPull(){
+  const d=currentDraft(); if(!d) throw new Error('No draft');
+  const res = await tryActions({id:d.id}, ['draft_get','get','load','read']);
+  // Merge back into local draft
+  const dd = currentDraft(); if(!dd) return res;
+  dd.fields = dd.fields || {};
+  dd.fields.serial = res.serial || dd.fields.serial;
+  if (res.fields && res.fields['general.gen_certno']) setv('gen_certno', res.fields['general.gen_certno']);
+  writeDraft(dd); refreshSwitcher(); applyHeader();
+  return res;
+}
+
+/* Manual Sync button helper */
+async function autoSyncNow(trigger='auto'){
+  saveDraft();
+  const r = await syncPush();
+  if (trigger==='manual') showToast('Synced ✓','ok');
+  return r;
+}
+
+/* Debounced auto-sync */
+let syncTimer=null;
+function queueAutoSync(){
+  if (syncTimer) clearTimeout(syncTimer);
+  syncTimer = setTimeout(()=>autoSyncNow('auto').catch(e=>console.warn('AutoSync:',e.message)), 900);
+}
+
+/* ======================= UI WIRING ======================= */
+document.addEventListener('DOMContentLoaded', init);
+
+function init(){
+  // default date
+  if(!$('#gen_issue').value) $('#gen_issue').value=todayISO();
+
+  // seed first draft if none
+  if(!draftsOf(curType).length){
+    // create first draft locally (no server yet)
+    const d = { id: crypto.randomUUID(), type: curType, fields:{serial:""}, general:{gen_issue: todayISO()}, sr:{}, globalAtts:[] };
+    writeDraft(d); curId=d.id;
+  }else{ curId=draftsOf(curType)[0].id; }
+
+  refreshSwitcher(); loadDraft(); defaultScope();
+
+  // inputs → autosync
+  $('#tm-sheet').addEventListener('input', queueAutoSync);
+
+  // Tabs
+  $$('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      $$('.tab-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      curType = btn.dataset.type;
+      // ensure there is at least one draft for this type
+      if(!draftsOf(curType).length){
+        const d = { id: crypto.randomUUID(), type: curType, fields:{serial:""}, general:{gen_issue: todayISO()}, sr:{}, globalAtts:[] };
+        writeDraft(d); curId=d.id;
+      }else{ curId=draftsOf(curType)[0].id; }
+      refreshSwitcher(); loadDraft();
+    });
+  });
+
+  // Draft switcher
+  $('#draft-switcher').addEventListener('change', e=>{ curId = e.target.value; loadDraft(); });
+
+  // New draft (animated)
+  $('#btn-new').addEventListener('click', ()=> withBusy($('#btn-new'), async ()=>{
+    const info = TYPE_INFO[curType]; if(!info) return;
+    // ask server for id+serial
+    const res = await tryActions({type:curType}, ['draft_new','new','create']);
+    const d = { id: res.id, type: curType, fields:{serial:res.serial, issue: todayISO()}, general:{ gen_issue: todayISO() }, sr:{}, globalAtts:[] };
+    writeDraft(d); curId=d.id; refreshSwitcher(); loadDraft(); showToast('New draft created','ok');
+  }));
+
+  // Delete draft (animated)
+  $('#btn-del').addEventListener('click', ()=> withBusy($('#btn-del'), async ()=>{
+    const d=currentDraft(); if(!d){ showToast('No draft','bad'); return; }
+    if(!confirm('Delete this draft?')) return;
+    try{ await tryActions({id:d.id}, ['draft_delete','delete','remove']); }catch(e){ /* best-effort */ }
+    deleteDraftFromStore(d.type, d.id);
+    const remain = draftsOf(curType);
+    if(remain.length){ curId = remain[0].id; } else {
+      const nd = { id: crypto.randomUUID(), type: curType, fields:{serial:""}, general:{gen_issue: todayISO()}, sr:{}, globalAtts:[] };
+      writeDraft(nd); curId=nd.id;
+    }
+    refreshSwitcher(); loadDraft(); showToast('Draft deleted','ok');
+  }));
+
+  // Manual Sync
+  $('#btn-sync').addEventListener('click', ()=> withBusy($('#btn-sync'), async ()=>{
+    try{ await autoSyncNow('manual'); await syncPull(); }catch(e){ showToast('Sync failed: '+e.message,'bad',2600); }
+  }));
+
+  // Export PDF
+  $('#btn-pdf').addEventListener('click', async ()=>{
+    const overlay=$('#overlay'), txt=$('#overlay-text');
+    overlay.classList.remove('hidden'); overlay.classList.add('flex'); txt.textContent='Rendering PDF…';
+    try{
+      // ensure heavy libs are loaded on-demand
+      await loadPdfLibs();
+      // build a Blob and download via object URL to avoid holding huge data: URIs in memory
+      const blob = await buildPdfBlob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = ($('#hdr-serial').textContent||'report') + '.pdf';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 3000);
+    }catch(err){ alert('PDF failed: '+err.message); }
+    overlay.classList.add('hidden'); overlay.classList.remove('flex');
+  });
+
+  // Submit / Request Review
+  $('#btn-submit').addEventListener('click', async ()=>{
+    const overlay=$('#overlay'), txt=$('#overlay-text'); overlay.classList.remove('hidden'); overlay.classList.add('flex');
+    try{
+      txt.textContent='Rendering PDF…';
+      // ensure heavy libs are loaded on-demand
+      await loadPdfLibs();
+      const pdfDataUri = await buildPdfDataUri();
+      // also create a Blob in case multipart upload is implemented server-side later
+      const pdfBlob = dataURItoBlob(pdfDataUri);
+      txt.textContent='Submitting for review…';
+      const payload = collectAllForSubmit();
+      const d=currentDraft(); const serialSafe=(d?.fields?.serial||'report').replace(/[^\w.-]/g,'_');
+      payload.attachments = payload.attachments || [];
+      payload.attachments.unshift({ name: `${serialSafe}.pdf`, mimeType: 'application/pdf', data: pdfDataUri });
+      const res = await tryActions(payload, ['submit']);
+      alert('Request sent for review. Serial: '+(res?.serial||d.fields?.serial||''));
+    }catch(err){ alert('Submit failed: '+(err?.message||err)); }
+    overlay.classList.add('hidden'); overlay.classList.remove('flex');
+  });
+
+  // Keep data safe on unload
+  window.addEventListener('beforeunload', ()=>{ try{ saveDraft(); }catch{} });
+}
+
+/* Buttons for the scope table */
+$('#sr_scope_add').addEventListener('click', ()=>{ addScopeRow($$('#sr_scope_tbl tbody tr').length+1,"",false); saveDraft(); queueAutoSync(); });
+$('#sr_scope_clear').addEventListener('click', ()=>{ if(confirm('Clear all scope rows?')){ $('#sr_scope_tbl tbody').innerHTML=""; saveDraft(); queueAutoSync(); }});
+</script>
+</body>
+</html>
